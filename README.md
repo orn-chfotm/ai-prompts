@@ -30,6 +30,10 @@ docs
 - `.codex`와 `.claude`의 내용은 모든 프로젝트에 공통인 경우가 아니라면 commit하지 않는다.
 - 반복적으로 여러 프로젝트에 필요해진 규칙은 `docs`로 승격한다.
 
+이 저장소의 `.codex/config.toml`, `.claude/settings.json`, `.codex/*/.gitkeep`, `.claude/*/.gitkeep`는 공통 adapter 골격을 보여주기 위한 placeholder다.
+
+실제 프로젝트에서 값을 채운 설정 파일은 공통 하네스로 합의된 내용이 아니라면 프로젝트별 또는 로컬 환경에서만 관리한다.
+
 ## docs 역할
 
 `docs`는 다음 내용을 담당한다.
@@ -119,7 +123,7 @@ Codex가 항상 지켜야 하는 실행 제약을 둔다.
 예시:
 
 - 승인 전 파일 수정 금지
-- 특정 명령 실행 전 승인 필요
+- 상태를 변경하는 특정 명령 실행 전 승인 필요
 - critical 발견 시 `docs/50-review/04-review-logging.md` 기준 적용
 - 프로젝트별 로그 위치 준수
 

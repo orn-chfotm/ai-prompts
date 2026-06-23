@@ -27,19 +27,19 @@ description: "리뷰 중 발견한 에러, 크리티컬, 개선 사항을 하네
 프로젝트에 정해진 위치가 없으면 다음 경로를 기본값으로 사용한다.
 
 ```text
-docs/reviews/
+.ai/reviews/
 ```
 
 날짜별 파일을 사용할 때는 다음 형식을 권장한다.
 
 ```text
-docs/reviews/YYYY-MM-DD.md
+.ai/reviews/YYYY-MM-DD.md
 ```
 
 작업 단위별 파일을 사용할 때는 다음 형식을 권장한다.
 
 ```text
-docs/reviews/<task-id>.md
+.ai/reviews/<task-id>.md
 ```
 
 ## submodule 사용 시 기준
@@ -49,7 +49,8 @@ docs/reviews/<task-id>.md
 - 하네스 submodule 내부 파일에는 프로젝트별 리뷰 로그를 남기지 않는다.
 - 실제 프로젝트 repository의 문서 또는 로그 디렉토리에 기록한다.
 - 프로젝트별 로그 위치가 있으면 그 위치를 우선한다.
-- 로그 위치가 없으면 프로젝트 root 기준 `docs/reviews/`를 제안한다.
+- 로그 위치가 없으면 프로젝트 root 기준 `.ai/reviews/`를 제안한다.
+- 실제 프로젝트가 하네스를 `docs/` 경로로 submodule import하는 경우 `docs/reviews/`는 사용하지 않는다.
 
 ## 로그 형식
 
