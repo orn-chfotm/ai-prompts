@@ -337,3 +337,6 @@ docs/        # submodule 또는 공통 문서
 .agents/     # 프로젝트별 Codex skills
 .claude/     # 프로젝트별 Claude adapter
 ```
+
+## 확인 사항
+- 이 경로가 프로젝트 루트 경로가 아닌 별도 폴더의 git sub module 이라면
