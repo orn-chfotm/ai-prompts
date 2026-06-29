@@ -17,6 +17,10 @@ docs
 = Codex adapter
 = Codex에서 docs 하네스를 실제로 연결하거나 확장하는 로컬/프로젝트별 설정
 
+.agents
+= Codex skills
+= Codex가 repository skill을 탐색하는 위치
+
 .claude
 = Claude adapter
 = Claude에서 docs 하네스를 실제로 연결하거나 확장하는 로컬/프로젝트별 설정
@@ -26,13 +30,14 @@ docs
 
 - `docs`는 공통적으로 처리되어야 하는 AI 하네스 기준이다.
 - `.codex`와 `.claude`는 프로젝트별 Agent 실행 환경을 조정하는 adapter다.
+- `.agents/skills`는 Codex 전용 skill 위치다.
 - 실제 프로젝트의 상세 구현 규칙, 인프라 구조, DB 제약, 리뷰어 역할은 필요한 경우 `.codex` 또는 `.claude`에 추가한다.
-- `.codex`와 `.claude`의 내용은 모든 프로젝트에 공통인 경우가 아니라면 commit하지 않는다.
+- `.codex`, `.claude`, `.agents`의 내용은 모든 프로젝트에 공통인 경우가 아니라면 commit하지 않는다.
 - 반복적으로 여러 프로젝트에 필요해진 규칙은 `docs`로 승격한다.
 
-이 저장소의 `.codex/config.toml`, `.claude/settings.json`, `.codex/*/.gitkeep`, `.claude/*/.gitkeep`는 공통 adapter 골격을 보여주기 위한 placeholder다.
+이 저장소는 기본적으로 `.codex`, `.claude`, `.agents` 실제 디렉토리 구조를 commit하지 않는다.
 
-실제 프로젝트에서 값을 채운 설정 파일은 공통 하네스로 합의된 내용이 아니라면 프로젝트별 또는 로컬 환경에서만 관리한다.
+사용자는 pull 받은 프로젝트에서 필요한 Agent에 맞게 `codex dir init` 또는 `claude dir init`을 요청해 로컬 adapter 구조를 생성한다.
 
 ## docs 역할
 
@@ -88,14 +93,16 @@ docs/20-ai-process/agents/roles/02-cto.md
 
 ## .codex 구조
 
-Codex를 사용하는 프로젝트에서는 필요할 때 `.codex`를 둔다.
+Codex를 사용하는 프로젝트에서는 필요할 때 `codex dir init`을 요청해 다음 구조를 생성한다.
 
 ```text
 .codex/
   config.toml
+  hooks.json
   rules/
-  skills/
   agents/
+.agents/
+  skills/
 ```
 
 ### .codex/config.toml
@@ -107,7 +114,6 @@ Codex 프로젝트 설정을 둔다.
 - 모델 또는 reasoning 기본값
 - sandbox, approval 관련 기본값
 - MCP 서버 연결
-- Codex hooks
 - project-local Codex 설정
 
 넣지 말아야 할 내용:
@@ -115,6 +121,25 @@ Codex 프로젝트 설정을 둔다.
 - 개인 인증 정보
 - 프로젝트마다 달라지는 임시 실험 설정
 - 모든 프로젝트에 공통이 아닌 개인 선호
+
+### .codex/hooks.json
+
+Codex lifecycle hook을 둔다.
+
+hook을 `hooks.json`에 둘지 `.codex/config.toml`의 `[hooks]`에 둘지 선택할 수 있지만, 같은 layer에서는 한 방식만 사용하는 것을 권장한다.
+
+넣을 수 있는 내용의 예시는 다음과 같다.
+
+- tool 사용 전 검증
+- turn 종료 후 검증
+- prompt 제출 전 검사
+- 프로젝트별 logging 또는 policy check
+
+넣지 말아야 할 내용:
+
+- 개인 인증 정보
+- 외부 시스템을 무단으로 변경하는 자동화
+- 공통으로 합의되지 않은 강제 hook
 
 ### .codex/rules
 
@@ -127,7 +152,7 @@ Codex가 항상 지켜야 하는 실행 제약을 둔다.
 - critical 발견 시 `docs/50-review/04-review-logging.md` 기준 적용
 - 프로젝트별 로그 위치 준수
 
-### .codex/skills
+### .agents/skills
 
 Codex에서 반복 수행할 절차를 둔다.
 
@@ -142,6 +167,8 @@ skills는 역할이 아니라 절차다.
 - mybatis-query-review
 
 skill은 `docs`의 원칙을 특정 작업 절차로 실행하기 위한 adapter다.
+
+Codex skill은 `.codex/skills`가 아니라 `.agents/skills/<skill-name>/SKILL.md`에 둔다.
 
 ### .codex/agents
 
@@ -158,7 +185,7 @@ agent는 `docs`의 역할 기준을 실제 Codex 실행 역할로 연결한다.
 
 ## .claude 구조
 
-Claude를 사용하는 프로젝트에서는 필요할 때 `.claude`를 둔다.
+Claude를 사용하는 프로젝트에서는 필요할 때 `claude dir init`을 요청해 다음 구조를 생성한다.
 
 ```text
 .claude/
@@ -225,14 +252,56 @@ agents는 `docs`의 역할 기준을 Claude subagent로 연결한다.
 
 기본 commit 대상은 `docs`다.
 
-`.codex`와 `.claude`는 다음 조건을 만족할 때만 commit한다.
+`.codex`, `.claude`, `.agents`는 다음 조건을 만족할 때만 commit한다.
 
 - 여러 프로젝트에서 동일하게 사용할 공통 adapter다.
 - 개인 로컬 설정이 아니다.
 - 실험용 설정이 아니다.
 - 팀 또는 사용자 기준으로 공통 하네스 일부로 합의되었다.
 
-그 외의 `.codex`와 `.claude` 설정은 각 프로젝트 또는 로컬 환경에서만 사용한다.
+그 외의 `.codex`, `.claude`, `.agents` 설정은 각 프로젝트 또는 로컬 환경에서만 사용한다.
+
+## dir init 사용법
+
+이 저장소를 pull 받은 뒤 필요한 Agent에 맞춰 다음처럼 요청한다.
+
+Codex 기본 구조:
+
+```text
+codex dir init
+```
+
+생성 구조:
+
+```text
+.codex/
+  config.toml
+  hooks.json
+  rules/
+  agents/
+.agents/
+  skills/
+```
+
+Claude 기본 구조:
+
+```text
+claude dir init
+```
+
+생성 구조:
+
+```text
+.claude/
+  settings.json
+  rules/
+  skills/
+  agents/
+```
+
+init 결과물은 기본적으로 프로젝트별 로컬 adapter다.
+
+공통 하네스로 합의되지 않았다면 commit하지 않는다.
 
 ## 사용 예시
 
@@ -248,6 +317,7 @@ Codex만 사용하는 프로젝트:
 ```text
 docs/
 .codex/
+.agents/
 ```
 
 둘 다 사용하는 프로젝트:
@@ -255,6 +325,7 @@ docs/
 ```text
 docs/
 .codex/
+.agents/
 .claude/
 ```
 
@@ -263,5 +334,6 @@ docs/
 ```text
 docs/        # submodule 또는 공통 문서
 .codex/      # 프로젝트별 Codex adapter
+.agents/     # 프로젝트별 Codex skills
 .claude/     # 프로젝트별 Claude adapter
 ```

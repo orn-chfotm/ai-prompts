@@ -12,6 +12,7 @@ Codex는 공식적으로 `AGENTS.md`를 프로젝트 지침으로 읽는다. Cla
 
 - `docs/00-docs/00.index.md`
 - `docs/00-docs/01-md-structure.md`
+- `docs/00-docs/03-agent-dir-init.md`
 
 ## 기술 규칙 참조
 
@@ -58,6 +59,29 @@ Codex는 공식적으로 `AGENTS.md`를 프로젝트 지침으로 읽는다. Cla
 ## Codex 전용 규칙
 
 - Codex 전용 설정은 `.codex/`에 둔다.
-- Codex 전용 skill은 `.codex/skills/<skill-name>/SKILL.md`에 둔다.
+- Codex 전용 skill은 `.agents/skills/<skill-name>/SKILL.md`에 둔다.
 - Codex 전용 custom agent는 `.codex/agents/<agent-name>.toml`에 둔다.
+- Codex 전용 rule은 `.codex/rules/*.rules`에 둔다.
+- Codex 전용 hook은 `.codex/hooks.json` 또는 `.codex/config.toml`의 `[hooks]`에 둔다.
 - 공통 규칙은 `docs/`의 번호형 문서 구조에 유지하고, Codex 전용 문법을 공통 문서에 넣지 않는다.
+
+## Codex dir init
+
+사용자가 `codex dir init`을 요청하면 다음 구조를 생성한다.
+
+```text
+.codex/
+  config.toml
+  hooks.json
+  rules/
+  agents/
+.agents/
+  skills/
+```
+
+- 파일은 내용 없는 빈 파일로 생성한다.
+- 디렉토리는 비어 있는 디렉토리로 생성한다.
+- `.codex/skills/`는 생성하지 않는다.
+- 이미 존재하는 파일이 비어 있으면 유지한다.
+- 이미 존재하는 파일에 내용이 있으면 덮어쓰기 전에 사용자 확인을 받는다.
+- 이 구조는 프로젝트별 로컬 adapter이며, 공통 하네스로 합의되지 않았다면 commit 대상으로 보지 않는다.

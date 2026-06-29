@@ -48,6 +48,8 @@ Codex와 Claude는 공식 로딩 방식이 다르다.
 - 공통 문서에는 특정 Agent만 이해하는 문법을 넣지 않는다.
 - `AGENTS.md`와 `CLAUDE.md`는 docs 하네스를 연결하는 adapter로 취급한다.
 - Agent별 실제 실행 커스터마이징은 `.codex`와 `.claude`에 두되, 공통 하네스 문서와 섞지 않는다.
+- Codex skill은 `.codex/skills`가 아니라 `.agents/skills`에 둔다.
+- Agent별 기본 디렉토리 생성 기준은 `03-agent-dir-init.md`를 따른다.
 
 ## 문서 이동 규칙
 
