@@ -39,6 +39,20 @@ docs
 
 사용자는 pull 받은 프로젝트에서 필요한 Agent에 맞게 `codex dir init` 또는 `claude dir init`을 요청해 로컬 adapter 구조를 생성한다.
 
+## 실행 툴별 진입점
+
+Claude와 Codex는 프로젝트 지침 파일명과 import 문법이 다르다.
+
+따라서 모든 AI 툴을 아우르는 공통 상위 md를 별도로 만들지 않고, 실행 툴별 진입점을 분리한다.
+
+| 실행 툴 | 프로젝트 루트 진입점 | 공통 하네스 진입점 |
+|---|---|---|
+| Claude | `CLAUDE.md` | `ai-prompts/CLAUDE.md` |
+| Codex | `AGENTS.md` | `ai-prompts/AGENTS.md` |
+
+Claude 프로젝트에서는 루트 `CLAUDE.md`가 `ai-prompts/CLAUDE.md`를 import한다.
+Codex 프로젝트에서는 루트 `AGENTS.md`가 `ai-prompts/AGENTS.md`의 참조 구조를 따른다.
+
 ## docs 역할
 
 `docs`는 다음 내용을 담당한다.
