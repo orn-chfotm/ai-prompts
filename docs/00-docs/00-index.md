@@ -19,7 +19,7 @@ description: "docs 디렉토리와 현재 md 파일 구조를 설명하는 문�
 
 ## 파일 목록
 
-- `00.index.md`: 이 디렉토리의 목적과 전체 docs 대분류 설명
+- `00-index.md`: 이 디렉토리의 목적과 전체 docs 대분류 설명
 - `01-md-structure.md`: md 파일 구조, 번호 규칙, Agent 진입점 관리 기준
 - `02-harness-boundary.md`: docs, `.codex`, `.claude`의 책임 경계와 commit 기준
 - `03-agent-dir-init.md`: `codex dir init`, `claude dir init` 요청 시 생성할 Agent adapter 기본 구조
@@ -28,8 +28,8 @@ description: "docs 디렉토리와 현재 md 파일 구조를 설명하는 문�
 
 - 대분류 디렉토리는 `00-*`, `10-*`, `20-*`처럼 10단위 번호를 사용한다.
 - 대분류 하위 디렉토리는 `agents`, `roles`처럼 주제명만 사용한다.
-- 각 디렉토리 안의 md 파일은 `00.index.md`, `01-*`, `02-*`처럼 1단위 번호를 사용한다.
-- 각 디렉토리의 첫 파일은 반드시 `00.index.md`로 둔다.
+- 각 디렉토리 안의 md 파일은 `00-index.md`, `01-*`, `02-*`처럼 1단위 번호를 사용한다.
+- 각 디렉토리의 첫 파일은 반드시 `00-index.md`로 둔다.
 
 ## 핵심 방향
 

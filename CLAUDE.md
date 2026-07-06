@@ -3,6 +3,7 @@ description: "Claude 전용 프로젝트 진입점입니다. 상단의 @ import�
 ---
 
 @docs/00-docs/01-md-structure.md
+@docs/00-docs/02-harness-boundary.md
 @docs/00-docs/03-agent-dir-init.md
 @docs/10-technical/01-naming.md
 @docs/10-technical/02-spring.md
@@ -41,18 +42,4 @@ Claude는 공식적으로 `CLAUDE.md`의 `@path` import를 지원하므로, 공�
 
 ## Claude dir init
 
-사용자가 `claude dir init`을 요청하면 다음 구조를 생성한다.
-
-```text
-.claude/
-  settings.json
-  rules/
-  skills/
-  agents/
-```
-
-- 파일은 내용 없는 빈 파일로 생성한다.
-- 디렉토리는 비어 있는 디렉토리로 생성한다.
-- 이미 존재하는 파일이 비어 있으면 유지한다.
-- 이미 존재하는 파일에 내용이 있으면 덮어쓰기 전에 사용자 확인을 받는다.
-- 이 구조는 프로젝트별 로컬 adapter이며, 공통 하네스로 합의되지 않았다면 commit 대상으로 보지 않는다.
+사용자가 `claude dir init`을 요청하면 `docs/00-docs/03-agent-dir-init.md`의 "claude dir init" 기준을 단일 기준으로 따라 `.claude/` 로컬 adapter 구조를 생성한다.

@@ -14,8 +14,8 @@ description: "AI 역할 분담과 Agent 작동 방식을 관리하는 대분류 
 
 ## 읽는 순서
 
-1. `agents/00.index.md`
+1. `agents/00-index.md`
 2. `agents/01-agent-entrypoints.md`
 3. `agents/02-role-model.md`
 4. `agents/03-approval-authority.md`
-5. `agents/roles/00.index.md`
+5. `agents/roles/00-index.md`

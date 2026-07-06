@@ -266,56 +266,15 @@ agents는 `docs`의 역할 기준을 Claude subagent로 연결한다.
 
 기본 commit 대상은 `docs`다.
 
-`.codex`, `.claude`, `.agents`는 다음 조건을 만족할 때만 commit한다.
-
-- 여러 프로젝트에서 동일하게 사용할 공통 adapter다.
-- 개인 로컬 설정이 아니다.
-- 실험용 설정이 아니다.
-- 팀 또는 사용자 기준으로 공통 하네스 일부로 합의되었다.
-
-그 외의 `.codex`, `.claude`, `.agents` 설정은 각 프로젝트 또는 로컬 환경에서만 사용한다.
+`.codex`, `.claude`, `.agents`의 commit 조건은 `docs/00-docs/02-harness-boundary.md`의 "commit 기준"을 단일 기준으로 따른다.
 
 ## dir init 사용법
 
-이 저장소를 pull 받은 뒤 필요한 Agent에 맞춰 다음처럼 요청한다.
+이 저장소를 pull 받은 뒤 필요한 Agent에 맞춰 `codex dir init` 또는 `claude dir init`을 요청한다.
 
-Codex 기본 구조:
-
-```text
-codex dir init
-```
-
-생성 구조:
-
-```text
-.codex/
-  config.toml
-  hooks.json
-  rules/
-  agents/
-.agents/
-  skills/
-```
-
-Claude 기본 구조:
-
-```text
-claude dir init
-```
-
-생성 구조:
-
-```text
-.claude/
-  settings.json
-  rules/
-  skills/
-  agents/
-```
+생성 구조, 생성 위치, 기존 파일 처리 기준은 `docs/00-docs/03-agent-dir-init.md`를 단일 기준으로 따른다.
 
 init 결과물은 기본적으로 프로젝트별 로컬 adapter다.
-
-공통 하네스로 합의되지 않았다면 commit하지 않는다.
 
 ## 사용 예시
 
@@ -352,5 +311,4 @@ docs/        # submodule 또는 공통 문서
 .claude/     # 프로젝트별 Claude adapter
 ```
 
-## 확인 사항
-- 이 경로가 프로젝트 루트 경로가 아닌 별도 폴더의 git sub module 이라면
+이 하네스를 프로젝트 루트가 아닌 별도 하위 폴더의 git submodule로 사용하는 경우의 adapter 생성 위치와 진입점 md 생성 기준은 `docs/00-docs/03-agent-dir-init.md`의 "생성 위치 기준"을 따른다.

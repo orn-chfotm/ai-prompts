@@ -94,6 +94,13 @@ my-project/               ← 프로젝트 루트 = 하네스 루트
 - `<submodule-path>`는 실제 하네스 submodule 경로로 대체한다. (예: `ai-prompts`)
 - 이미 `CLAUDE.md`가 존재하고 내용이 있으면 덮어쓰기 전에 사용자 확인을 받는다.
 - 이 import를 통해 Claude는 `docs/` 하위 모든 하네스 규칙을 인식한다.
+- 프로젝트별 rule, skill이 생기면 하네스 import 아래에 `@.claude/rules/...`, `@.claude/skills/...` import를 추가할 수 있다. 하네스 import 한 줄은 유지하고, 프로젝트별 import는 그 아래에 둔다.
+
+```md
+@<submodule-path>/CLAUDE.md
+
+@.claude/rules/example-rule.md
+```
 
 ### codex dir init 시 — AGENTS.md 생성
 
