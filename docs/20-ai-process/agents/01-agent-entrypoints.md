@@ -1,14 +1,16 @@
 ---
-description: "Codex와 Claude가 docs 하위 공통 문서를 각자의 공식 로딩 방식에 맞게 참조하는 방법입니다."
+description: "AI tool adapter가 docs 하위 공통 문서를 각자의 로딩 방식에 맞게 참조하는 방법입니다."
 ---
 
 # Agent 진입점 연결 예시
 
-이 문서는 `docs` 하네스를 Codex와 Claude에서 어떻게 연결할 수 있는지 보여주는 예시다.
+이 문서는 `docs` 하네스를 AI tool adapter에서 어떻게 연결할 수 있는지 보여주는 예시다.
 
 실제 `AGENTS.md`, `CLAUDE.md`, `.codex`, `.claude` 파일을 이 문서가 직접 관리하지 않는다.
 
-Codex와 Claude는 서로 다른 공식 로딩 방식을 사용하므로, 프로젝트별 adapter에서 `docs`를 연결한다.
+AI tool은 서로 다른 공식 로딩 방식을 사용할 수 있으므로, 프로젝트별 adapter에서 `docs`를 연결한다.
+
+아래 Codex와 Claude는 현재 제공하는 adapter 예시다. 새 tool을 추가할 때도 `docs` 본문에 tool 전용 문법을 넣지 않고, 별도 adapter 진입점에서 `docs`를 연결한다.
 
 ## Codex
 
@@ -68,7 +70,14 @@ Claude의 모듈형 규칙, skill, subagent가 필요하면 프로젝트의 `.cl
 
 ## 금지 사항
 
-- `CLAUDE.md`가 `AGENTS.md`를 import하는 방식은 이 프로젝트의 기본 구조로 사용하지 않는다.
+- `CLAUDE.md`가 `AGENTS.md`를 import하는 방식은 이 하네스의 기본 구조로 사용하지 않는다.
 - `AGENTS.md`에 Claude 전용 `@path` import 문법을 넣지 않는다.
-- 공통 문서에 특정 Agent만 이해하는 설정 문법을 넣지 않는다.
+- 공통 문서에 특정 tool만 이해하는 설정 문법을 넣지 않는다.
 - `.codex` 또는 `.claude`의 로컬 설정을 공통 하네스 규칙처럼 `docs`에 복사하지 않는다.
+
+## 새 adapter 추가 기준
+
+- 새 tool의 공식 프로젝트 지침 파일명과 로딩 방식을 확인한다.
+- `docs` 하위 공통 문서를 tool이 읽을 수 있는 방식으로 연결한다.
+- tool 전용 설정, hook, skill, agent는 해당 tool adapter에 둔다.
+- 여러 tool에서 공유할 수 있는 원칙만 `docs`로 승격한다.

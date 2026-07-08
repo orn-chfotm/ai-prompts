@@ -1,5 +1,5 @@
 ---
-description: "docs, .codex, .claude의 책임 경계와 commit 기준을 정의합니다."
+description: "docs와 tool adapter의 책임 경계와 commit 기준을 정의합니다."
 ---
 
 # 하네스 경계
@@ -21,40 +21,33 @@ description: "docs, .codex, .claude의 책임 경계와 commit 기준을 정의�
 
 `docs`는 특정 Agent의 실행 설정 파일을 대신하지 않는다.
 
-## .codex의 책임
+## tool adapter의 책임
 
-`.codex`는 Codex 실행 환경을 조정하는 adapter 영역이다.
+tool adapter는 특정 AI tool의 실행 환경을 조정하는 영역이다.
 
 예시는 다음과 같다.
 
-- Codex project config
-- Codex custom agent
-- Codex 전용 hook 또는 rule
+- tool별 project config
+- tool별 custom agent 또는 subagent
+- tool별 hook, rule, skill
+- tool별 문서 로딩 방식 연결
+
+이 내용은 프로젝트마다 달라질 수 있으므로, 모든 프로젝트에 공통으로 필요한 경우가 아니라면 commit 대상으로 보지 않는다.
+
+### 현재 adapter 예시
+
+- Codex: `.codex/`, `.agents/`
+- Claude: `.claude/`
 
 Codex skill은 `.codex`가 아니라 `.agents/skills`에 둔다.
 
 `.agents/skills`는 Codex가 repository skill을 탐색하는 위치다.
 
-이 내용은 프로젝트마다 달라질 수 있으므로, 모든 프로젝트에 공통으로 필요한 경우가 아니라면 commit 대상으로 보지 않는다.
-
-## .claude의 책임
-
-`.claude`는 Claude 실행 환경을 조정하는 adapter 영역이다.
-
-예시는 다음과 같다.
-
-- Claude settings
-- Claude rule
-- Claude skill
-- Claude subagent
-
-이 내용도 프로젝트마다 달라질 수 있으므로, 모든 프로젝트에 공통으로 필요한 경우가 아니라면 commit 대상으로 보지 않는다.
-
 ## commit 기준
 
 기본 commit 대상은 `docs`다.
 
-`.codex`와 `.claude`는 다음 조건을 만족할 때만 commit한다.
+tool adapter는 다음 조건을 만족할 때만 commit한다.
 
 - 여러 프로젝트에서 동일하게 사용해야 한다.
 - 개인 로컬 설정이 아니다.
@@ -68,13 +61,13 @@ Codex skill은 `.codex`가 아니라 `.agents/skills`에 둔다.
 - 특정 프로젝트의 세부 구현 결정
 - 개인 로컬 환경 설정
 - 비밀값, 토큰, 인증 정보
-- 한 Agent에서만 동작하는 실행 설정
+- 한 tool에서만 동작하는 실행 설정
 - 임시 실험용 skill 또는 rule
 
 ## 권장 흐름
 
 1. 공통 원칙은 `docs`에 작성한다.
-2. 프로젝트별 적용 방식은 해당 프로젝트의 `.codex` 또는 `.claude`에 작성한다.
+2. 프로젝트별 적용 방식은 해당 프로젝트의 tool adapter에 작성한다.
 3. Codex skill은 `.agents/skills`에 작성한다.
 4. 여러 프로젝트에 반복 적용할 가치가 생기면 `docs`로 승격한다.
-5. Agent별 실행 adapter가 필요하면 각 Agent 디렉토리에 별도로 둔다.
+5. tool별 실행 adapter가 필요하면 각 tool adapter 디렉토리에 별도로 둔다.

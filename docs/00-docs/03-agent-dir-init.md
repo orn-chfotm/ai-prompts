@@ -4,15 +4,15 @@ description: "codex dir init, claude dir init 요청 시 생성할 Agent adapter
 
 # Agent dir init
 
-이 문서는 사용자가 채팅에서 Agent별 기본 디렉토리 생성을 요청했을 때 따라야 할 기준을 정의한다.
+이 문서는 사용자가 채팅에서 tool별 기본 adapter 디렉토리 생성을 요청했을 때 따라야 할 기준을 정의한다.
 
 `docs`는 공통 하네스 문서만 가진다.
 
-Agent별 실행 디렉토리는 사용자가 실제 프로젝트에서 필요할 때 생성한다.
+tool별 실행 디렉토리는 사용자가 실제 프로젝트에서 필요할 때 생성한다.
 
 ## 실행 툴별 진입점
 
-Claude와 Codex는 프로젝트 지침 파일명과 import 문법이 다르다.
+AI tool은 프로젝트 지침 파일명과 import 문법이 서로 다를 수 있다.
 
 따라서 모든 AI 툴을 아우르는 공통 상위 md를 별도로 만들지 않고, 실행 툴별 진입점을 분리한다.
 
@@ -33,11 +33,38 @@ Codex 프로젝트에서는 루트 `AGENTS.md`가 `ai-prompts/AGENTS.md`의 참�
 - 이미 존재하는 파일이 비어 있으면 유지한다.
 - 이미 존재하는 파일에 내용이 있으면 덮어쓰기 전에 사용자 확인을 받는다.
 - 생성된 adapter 구조는 프로젝트별 로컬 구조이며, 공통 하네스로 합의되지 않았다면 commit 대상으로 보지 않는다.
-- 무조건 프로젝트 루트가 아닌 프롬프트의 루트 디렉토리 하위에 생성한다.
+- adapter 디렉토리는 하네스 submodule 내부가 아니라 인식된 프로젝트 루트에 생성한다.
+- `--path` 옵션으로 루트로 인식할 위치를 지정할 수 있다. 기준은 아래 "--path 옵션"을 따른다.
+
+## --path 옵션
+
+`codex dir init`과 `claude dir init`은 `--path` 옵션으로 루트 인식 위치를 지정할 수 있다.
+
+| 명령 형태 | 루트 인식 기준 |
+|---|---|
+| `claude dir init` / `codex dir init` | 옵션이 없으면 기존과 동일하게 "생성 위치 기준"에 따라 프로젝트 루트를 판단한다 |
+| `claude dir init --path` / `codex dir init --path` | `--path` 뒤에 경로가 없으면 명령을 실행한 현재 위치를 프로젝트 루트로 인식한다 |
+| `claude dir init --path <경로>` / `codex dir init --path <경로>` | 지정한 경로를 프로젝트 루트로 인식한다 |
+
+경로 해석 기준:
+
+- 상대 경로는 명령을 실행한 현재 위치를 기준으로 해석한다.
+- 절대 경로는 그대로 사용한다.
+- 지정한 경로가 존재하지 않으면 생성 전에 사용자 확인을 받는다.
+- 하네스가 submodule로 사용되는 프로젝트에서 하네스 submodule 내부 경로를 루트로 지정하지 않는다.
+
+루트 인식 후 처리 기준:
+
+- 인식된 루트를 프로젝트 루트로 보고, "생성 위치 기준"의 케이스 1/케이스 2 판단과 예약 파일 생성 규칙을 동일하게 적용한다.
+- adapter 디렉토리(`.claude/`, `.codex/`, `.agents/`)와 Agent 인식용 md(`CLAUDE.md`, `AGENTS.md`)는 인식된 루트에 생성한다.
+- Agent 인식용 md의 `<submodule-path>`는 인식된 루트에서 하네스까지의 상대 경로로 계산한다.
+- 이미 존재하는 파일 처리, commit 기준은 옵션 없는 init과 동일하다.
 
 ## 생성 위치 기준
 
 `.claude/`, `.codex/`, `.agents/` adapter 디렉토리는 **항상 프로젝트 루트**에 생성한다.
+
+여기서 프로젝트 루트는 `--path` 옵션이 있으면 위 "--path 옵션" 기준으로 인식된 루트를, 옵션이 없으면 아래 케이스 판단에 따른 루트를 말한다.
 
 Claude Code와 Codex는 각각 프로젝트 루트의 `.claude/`, `.codex/`만 설정 디렉토리로 인식한다. 하네스가 submodule로 하위 폴더에 있더라도 adapter 디렉토리는 submodule 내부가 아니라 프로젝트 루트에 위치해야 한다.
 
@@ -108,7 +135,7 @@ my-project/               ← 프로젝트 루트 = 하네스 루트
 
 ```md
 ---
-description: "이 프로젝트의 Codex 진입점입니다. 공통 협업 규칙은 아래 docs 문서를 기준으로 참조합니다."
+description: "Codex adapter 진입점입니다. 공통 협업 규칙은 아래 docs 문서를 기준으로 참조합니다."
 ---
 
 # AGENTS.md
@@ -187,7 +214,7 @@ description: "이 프로젝트의 Codex 진입점입니다. 공통 협업 규칙
 
 ## commit 기준
 
-이 저장소를 submodule 또는 공통 하네스로 pull 받은 사용자는 필요한 Agent만 init한다.
+이 저장소를 submodule 또는 공통 하네스로 pull 받은 사용자는 필요한 tool adapter만 init한다.
 
 기본적으로 init 결과물은 각 프로젝트의 로컬 adapter다.
 
@@ -212,3 +239,5 @@ Claude가 이 규칙을 인식하려면 `CLAUDE.md` 상단에서 이 문서를 `
 |---|---|
 | `claude dir init` | `.claude/` 로컬 adapter 구조 생성 |
 | `codex dir init` | `.codex/`, `.agents/` 로컬 adapter 구조 생성 |
+| `claude dir init --path [경로]` | 지정 경로(생략 시 현재 위치)를 루트로 인식해 `.claude/` 로컬 adapter 구조 생성 |
+| `codex dir init --path [경로]` | 지정 경로(생략 시 현재 위치)를 루트로 인식해 `.codex/`, `.agents/` 로컬 adapter 구조 생성 |

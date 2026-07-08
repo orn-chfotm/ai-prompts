@@ -41,15 +41,15 @@ description: "문서의 목적을 한 문장으로 설명합니다."
 
 ## Agent 진입점
 
-Codex와 Claude는 공식 로딩 방식이 다르다.
+AI tool은 공식 로딩 방식이 서로 다를 수 있다.
 
-- Codex는 `AGENTS.md`에서 참조 문서 목록을 안내한다.
-- Claude는 `CLAUDE.md` 상단에서 `@docs/...` import를 사용한다.
-- 공통 문서에는 특정 Agent만 이해하는 문법을 넣지 않는다.
-- `AGENTS.md`와 `CLAUDE.md`는 docs 하네스를 연결하는 adapter로 취급한다.
-- Agent별 실제 실행 커스터마이징은 `.codex`와 `.claude`에 두되, 공통 하네스 문서와 섞지 않는다.
+- 현재 Codex adapter는 `AGENTS.md`에서 참조 문서 목록을 안내한다.
+- 현재 Claude adapter는 `CLAUDE.md` 상단에서 `@docs/...` import를 사용한다.
+- 공통 문서에는 특정 tool만 이해하는 문법을 넣지 않는다.
+- tool별 진입점 md는 docs 하네스를 연결하는 adapter로 취급한다.
+- tool별 실제 실행 커스터마이징은 tool adapter에 두되, 공통 하네스 문서와 섞지 않는다.
 - Codex skill은 `.codex/skills`가 아니라 `.agents/skills`에 둔다.
-- Agent별 기본 디렉토리 생성 기준은 `03-agent-dir-init.md`를 따른다.
+- tool별 기본 디렉토리 생성 기준은 `03-agent-dir-init.md`를 따른다.
 
 ## 문서 이동 규칙
 
@@ -88,4 +88,4 @@ Agent는 매 작업마다 전체 repository를 풀 스캔하지 않는다.
 
 일반적으로 commit 대상은 `docs` 하위 공통 하네스 문서다.
 
-`.codex`와 `.claude`의 commit 조건은 `02-harness-boundary.md`의 "commit 기준"을 단일 기준으로 따른다.
+tool adapter의 commit 조건은 `02-harness-boundary.md`의 "commit 기준"을 단일 기준으로 따른다.

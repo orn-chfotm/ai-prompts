@@ -8,7 +8,7 @@ description: "AI Agent 역할 구조와 승인 체계 문서의 인덱스입니�
 
 ## 파일 목록
 
-- `01-agent-entrypoints.md`: Codex와 Claude의 공식 진입점 참조 방식
+- `01-agent-entrypoints.md`: tool adapter의 공식 진입점 참조 방식
 - `02-role-model.md`: PM, CTO, PL, PA 역할 모델
 - `03-approval-authority.md`: 사용자 승인권과 승인 게이트
 - `roles/`: 역할별 상세 능력치와 책임
