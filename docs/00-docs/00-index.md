@@ -23,6 +23,7 @@ description: "docs 디렉토리와 현재 md 파일 구조를 설명하는 문�
 - `01-md-structure.md`: md 파일 구조, 번호 규칙, Agent 진입점 관리 기준
 - `02-harness-boundary.md`: docs, `.codex`, `.claude`의 책임 경계와 commit 기준
 - `03-agent-dir-init.md`: `dir init`, `codex dir init`, `claude dir init` 요청 시 생성할 Agent adapter 기본 구조
+- `04-skill-rule-template.md`: rule md와 skill md의 표준 구조 템플릿과 작성 원칙
 
 ## 번호 규칙
 
