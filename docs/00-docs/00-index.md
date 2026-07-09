@@ -22,7 +22,7 @@ description: "docs 디렉토리와 현재 md 파일 구조를 설명하는 문�
 - `00-index.md`: 이 디렉토리의 목적과 전체 docs 대분류 설명
 - `01-md-structure.md`: md 파일 구조, 번호 규칙, Agent 진입점 관리 기준
 - `02-harness-boundary.md`: docs, `.codex`, `.claude`의 책임 경계와 commit 기준
-- `03-agent-dir-init.md`: `codex dir init`, `claude dir init` 요청 시 생성할 Agent adapter 기본 구조
+- `03-agent-dir-init.md`: `dir init`, `codex dir init`, `claude dir init` 요청 시 생성할 Agent adapter 기본 구조
 
 ## 번호 규칙
 

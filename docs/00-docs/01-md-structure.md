@@ -44,11 +44,14 @@ description: "문서의 목적을 한 문장으로 설명합니다."
 AI tool은 공식 로딩 방식이 서로 다를 수 있다.
 
 - 현재 Codex adapter는 `AGENTS.md`에서 참조 문서 목록을 안내한다.
+- Codex의 참조 문서 목록은 자동 import 대상이 아니라, 작업 중 필요할 때 읽어야 하는 문서 안내다.
 - 현재 Claude adapter는 `CLAUDE.md` 상단에서 `@docs/...` import를 사용한다.
 - 공통 문서에는 특정 tool만 이해하는 문법을 넣지 않는다.
 - tool별 진입점 md는 docs 하네스를 연결하는 adapter로 취급한다.
 - tool별 실제 실행 커스터마이징은 tool adapter에 두되, 공통 하네스 문서와 섞지 않는다.
 - Codex skill은 `.codex/skills`가 아니라 `.agents/skills`에 둔다.
+- `dir init`은 현재 실행 AI 환경이 Claude인지 Codex인지 판단해 해당 adapter 구조를 생성한다.
+- 현재 `dir init` 자동 처리는 Claude와 Codex에서만 지원한다.
 - tool별 기본 디렉토리 생성 기준은 `03-agent-dir-init.md`를 따른다.
 
 ## 문서 이동 규칙

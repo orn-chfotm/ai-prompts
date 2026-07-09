@@ -1,5 +1,5 @@
 ---
-description: "codex dir init, claude dir init 요청 시 생성할 Agent adapter 기본 구조와 commit 기준을 정의합니다."
+description: "dir init, codex dir init, claude dir init 요청 시 생성할 Agent adapter 기본 구조와 commit 기준을 정의합니다."
 ---
 
 # Agent dir init
@@ -22,11 +22,18 @@ AI tool은 프로젝트 지침 파일명과 import 문법이 서로 다를 수 �
 | Codex | `AGENTS.md` | `ai-prompts/AGENTS.md` |
 
 Claude 프로젝트에서는 루트 `CLAUDE.md`가 `ai-prompts/CLAUDE.md`를 import한다.
-Codex 프로젝트에서는 루트 `AGENTS.md`가 `ai-prompts/AGENTS.md`의 참조 구조를 따른다.
+Codex 프로젝트에서는 루트 `AGENTS.md`가 `ai-prompts/AGENTS.md`의 참조 안내 구조를 따른다.
+
+Codex의 `AGENTS.md`는 Claude의 `@path` import처럼 참조 문서 본문을 자동으로 확장하는 구조가 아니다.
+
+따라서 Codex용 참조 문서 목록은 자동 로드가 아니라, Codex가 작업 중 필요할 때 읽어야 하는 하네스 문서 안내로 사용한다.
 
 ## 기본 원칙
 
-- `codex dir init`은 Codex 공식 구조에 맞는 로컬 adapter를 생성한다.
+- `dir init`은 현재 실행 중인 AI 환경이 Claude인지 Codex인지 판단해 해당 adapter init을 실행한다.
+- 현재 자동 init을 지원하는 AI 환경은 Claude와 Codex로 제한한다.
+- 지원하지 않는 AI 환경에서 `dir init`을 요청하면 바로 구조를 생성하지 않고, 아래 "미지원 AI 처리" 기준을 따른다.
+- `codex dir init`은 Codex가 공식적으로 인식하는 위치를 포함한 starter adapter를 생성한다.
 - `claude dir init`은 Claude 프로젝트 구조에 맞는 로컬 adapter를 생성한다.
 - 파일은 내용 없는 빈 파일로 생성한다.
 - 디렉토리는 비어 있는 디렉토리로 생성한다.
@@ -38,12 +45,15 @@ Codex 프로젝트에서는 루트 `AGENTS.md`가 `ai-prompts/AGENTS.md`의 참�
 
 ## --path 옵션
 
-`codex dir init`과 `claude dir init`은 `--path` 옵션으로 루트 인식 위치를 지정할 수 있다.
+`dir init`, `codex dir init`, `claude dir init`은 `--path` 옵션으로 루트 인식 위치를 지정할 수 있다.
 
 | 명령 형태 | 루트 인식 기준 |
 |---|---|
+| `dir init` | 현재 실행 AI 환경이 Claude이면 `claude dir init`, Codex이면 `codex dir init`으로 처리한다 |
 | `claude dir init` / `codex dir init` | 옵션이 없으면 기존과 동일하게 "생성 위치 기준"에 따라 프로젝트 루트를 판단한다 |
+| `dir init --path` | 현재 실행 AI 환경에 맞는 init을 실행하고, `--path` 뒤에 경로가 없으면 명령을 실행한 현재 위치를 프로젝트 루트로 인식한다 |
 | `claude dir init --path` / `codex dir init --path` | `--path` 뒤에 경로가 없으면 명령을 실행한 현재 위치를 프로젝트 루트로 인식한다 |
+| `dir init --path <경로>` | 현재 실행 AI 환경에 맞는 init을 실행하고, 지정한 경로를 프로젝트 루트로 인식한다 |
 | `claude dir init --path <경로>` / `codex dir init --path <경로>` | 지정한 경로를 프로젝트 루트로 인식한다 |
 
 경로 해석 기준:
@@ -133,6 +143,8 @@ my-project/               ← 프로젝트 루트 = 하네스 루트
 
 프로젝트 루트에 `AGENTS.md`를 생성하고, 하네스 docs 파일 목록을 참조 안내로 포함한다.
 
+이 목록은 Codex가 자동 import하는 대상이 아니라, 작업 중 필요할 때 읽어야 하는 문서 안내다.
+
 ```md
 ---
 description: "Codex adapter 진입점입니다. 공통 협업 규칙은 아래 docs 문서를 기준으로 참조합니다."
@@ -152,6 +164,38 @@ description: "Codex adapter 진입점입니다. 공통 협업 규칙은 아래 d
 
 - `<submodule-path>`는 실제 하네스 submodule 경로로 대체한다.
 - 이미 `AGENTS.md`가 존재하고 내용이 있으면 덮어쓰기 전에 사용자 확인을 받는다.
+
+## dir init
+
+사용자가 `dir init`을 요청하면 현재 실행 중인 AI 환경을 먼저 판단한다.
+
+| 현재 실행 AI 환경 | 처리 |
+|---|---|
+| Claude | `claude dir init`과 동일하게 처리 |
+| Codex | `codex dir init`과 동일하게 처리 |
+| 그 외 AI | 아래 "미지원 AI 처리" 기준을 따른다 |
+
+현재 지원 AI는 Claude와 Codex로 제한한다.
+
+## 미지원 AI 처리
+
+Claude 또는 Codex가 아닌 신규 AI 환경에서 사용자가 `dir init`을 요청하면 adapter 구조를 임의로 생성하지 않는다.
+
+다음 문구로 사용자에게 확인한다.
+
+```text
+현재 지원하지않는 AI 모델입니다. 공식문서를 참조해서 md 파일 과 설정 파일 구조를 md 추가할까요?
+```
+
+사용자가 동의하면 해당 AI의 공식 문서를 먼저 확인한 뒤, 다음 정보를 `docs/00-docs/03-agent-dir-init.md`와 실행 툴별 진입점 문서에 추가할지 검토한다.
+
+- 프로젝트 지침 md 파일명과 로드 방식
+- 설정 파일 또는 설정 디렉토리 위치
+- rules, skills, agents, hooks 등 공식 지원 확장 위치
+- `dir init`에서 생성할 starter adapter 구조
+- 기존 Claude/Codex 구조와 충돌하지 않도록 제한할 금지 규칙
+
+공식 문서로 확인되지 않은 구조는 생성 대상으로 추가하지 않는다.
 
 ## codex dir init
 
@@ -237,7 +281,9 @@ Claude가 이 규칙을 인식하려면 `CLAUDE.md` 상단에서 이 문서를 `
 
 | 명령 | 동작 |
 |---|---|
+| `dir init` | 현재 실행 AI 환경이 Claude이면 `.claude/`, Codex이면 `.codex/`, `.agents/` 로컬 adapter 구조 생성 |
 | `claude dir init` | `.claude/` 로컬 adapter 구조 생성 |
 | `codex dir init` | `.codex/`, `.agents/` 로컬 adapter 구조 생성 |
+| `dir init --path [경로]` | 현재 실행 AI 환경에 맞춰 지정 경로(생략 시 현재 위치)를 루트로 인식해 adapter 구조 생성 |
 | `claude dir init --path [경로]` | 지정 경로(생략 시 현재 위치)를 루트로 인식해 `.claude/` 로컬 adapter 구조 생성 |
 | `codex dir init --path [경로]` | 지정 경로(생략 시 현재 위치)를 루트로 인식해 `.codex/`, `.agents/` 로컬 adapter 구조 생성 |

@@ -31,13 +31,15 @@ docs
 - `docs`는 공통적으로 처리되어야 하는 AI 하네스 기준이다.
 - tool별 adapter는 프로젝트별 Agent 실행 환경을 조정한다.
 - 현재 기본 adapter는 Codex(`.codex`, `.agents`)와 Claude(`.claude`)를 제공한다.
+- `dir init`은 현재 실행 중인 AI 환경이 Claude인지 Codex인지 판단해 해당 adapter 구조를 생성한다.
+- 현재 `dir init` 자동 처리는 Claude와 Codex에서만 지원한다.
 - 실제 프로젝트의 상세 구현 규칙, 인프라 구조, DB 제약, 리뷰어 역할은 필요한 경우 해당 tool adapter에 추가한다.
 - tool adapter의 내용은 모든 프로젝트에 공통인 경우가 아니라면 commit하지 않는다.
 - 반복적으로 여러 프로젝트에 필요해진 규칙은 `docs`로 승격한다.
 
 이 저장소는 기본적으로 tool adapter 실제 디렉토리 구조를 commit하지 않는다.
 
-사용자는 pull 받은 프로젝트에서 필요한 tool adapter에 맞게 지원되는 dir init 명령을 요청해 로컬 adapter 구조를 생성한다.
+사용자는 pull 받은 프로젝트에서 `dir init` 또는 명시적인 tool별 dir init 명령을 요청해 로컬 adapter 구조를 생성한다.
 
 ## 실행 툴별 진입점
 
@@ -53,7 +55,8 @@ AI tool마다 프로젝트 지침 파일명과 import 문법이 다를 수 있�
 | Codex | `AGENTS.md` | `ai-prompts/AGENTS.md` |
 
 Claude 프로젝트에서는 루트 `CLAUDE.md`가 `ai-prompts/CLAUDE.md`를 import한다.
-Codex 프로젝트에서는 루트 `AGENTS.md`가 `ai-prompts/AGENTS.md`의 참조 구조를 따른다.
+Codex 프로젝트에서는 루트 `AGENTS.md`가 `ai-prompts/AGENTS.md`의 참조 안내 구조를 따른다.
+Codex의 참조 문서 목록은 자동 import 대상이 아니라, 작업 중 필요할 때 읽어야 하는 문서 안내다.
 새 tool을 추가할 때는 `docs`를 수정하기보다 해당 tool의 adapter 진입점과 로딩 방식을 별도로 정의한다.
 
 ## docs 역할
@@ -273,7 +276,17 @@ agents는 `docs`의 역할 기준을 Claude subagent로 연결한다.
 
 ## dir init 사용법
 
-이 저장소를 pull 받은 뒤 필요한 tool adapter에 맞춰 `codex dir init` 또는 `claude dir init`을 요청한다.
+이 저장소를 pull 받은 뒤 현재 실행 AI 환경에 맞춰 자동 생성하려면 `dir init`을 요청한다.
+
+명시적으로 지정하려면 `codex dir init` 또는 `claude dir init`을 요청한다.
+
+현재 자동 init을 지원하는 AI 환경은 Claude와 Codex로 제한한다.
+
+Claude 또는 Codex가 아닌 신규 AI 환경에서 `dir init`을 요청하면 다음 확인을 먼저 거친다.
+
+```text
+현재 지원하지않는 AI 모델입니다. 공식문서를 참조해서 md 파일 과 설정 파일 구조를 md 추가할까요?
+```
 
 생성 구조, 생성 위치, 기존 파일 처리 기준은 `docs/00-docs/03-agent-dir-init.md`를 단일 기준으로 따른다.
 

@@ -8,6 +8,8 @@ description: "Codex 전용 프로젝트 진입점입니다. docs 하위 대분�
 
 Codex는 공식적으로 `AGENTS.md`를 프로젝트 지침으로 읽는다. Claude 전용 `@path` import 문법은 이 파일에 사용하지 않는다.
 
+아래 문서 목록은 자동 import 대상이 아니라, 작업 중 필요할 때 읽어야 하는 참조 안내다.
+
 ## 문서 구조 참조
 
 - `docs/00-docs/00-index.md`
@@ -71,3 +73,17 @@ Codex는 공식적으로 `AGENTS.md`를 프로젝트 지침으로 읽는다. Cla
 사용자가 `codex dir init`을 요청하면 `docs/00-docs/03-agent-dir-init.md`의 "codex dir init" 기준을 단일 기준으로 따라 `.codex/`, `.agents/` 로컬 adapter 구조를 생성한다.
 
 `.codex/skills/`는 생성하지 않는다. Codex skill은 `.agents/skills/<skill-name>/SKILL.md`에 둔다.
+
+## dir init
+
+사용자가 `dir init`을 요청하면 현재 실행 AI 환경이 Codex이므로 `codex dir init`과 동일하게 처리한다.
+
+현재 자동 init을 지원하는 AI 환경은 Claude와 Codex로 제한한다.
+
+Claude 또는 Codex가 아닌 신규 AI 환경에서 `dir init`을 요청하면 adapter 구조를 임의로 생성하지 않고 다음 문구로 사용자에게 확인한다.
+
+```text
+현재 지원하지않는 AI 모델입니다. 공식문서를 참조해서 md 파일 과 설정 파일 구조를 md 추가할까요?
+```
+
+사용자가 동의하면 해당 AI의 공식 문서를 먼저 확인한 뒤 md 파일, 설정 파일, rules, skills, agents, hooks 등 공식 지원 구조를 문서에 추가할지 검토한다.

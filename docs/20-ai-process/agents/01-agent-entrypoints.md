@@ -18,6 +18,8 @@ Codex는 프로젝트 지침으로 `AGENTS.md`를 읽는다.
 
 Codex용 `AGENTS.md`는 공통 문서를 직접 import하는 문법을 가정하지 않는다. 대신 참조 문서 목록으로 `docs` 하네스를 안내한다.
 
+이 참조 문서 목록은 자동 로드 대상이 아니라, Codex가 작업 중 필요할 때 읽어야 하는 문서 안내다.
+
 예시:
 
 ```md
@@ -81,3 +83,7 @@ Claude의 모듈형 규칙, skill, subagent가 필요하면 프로젝트의 `.cl
 - `docs` 하위 공통 문서를 tool이 읽을 수 있는 방식으로 연결한다.
 - tool 전용 설정, hook, skill, agent는 해당 tool adapter에 둔다.
 - 여러 tool에서 공유할 수 있는 원칙만 `docs`로 승격한다.
+
+새 tool에서 `dir init`을 지원하려면 해당 tool의 공식 문서를 먼저 확인하고, `docs/00-docs/03-agent-dir-init.md`에 md 파일, 설정 파일, rules, skills, agents, hooks 등 공식 지원 구조와 금지 규칙을 추가한다.
+
+공식 문서로 확인되지 않은 구조는 init 생성 대상으로 추가하지 않는다.
