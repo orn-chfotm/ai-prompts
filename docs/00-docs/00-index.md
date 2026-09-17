@@ -8,6 +8,8 @@ description: "docs 디렉토리와 현재 md 파일 구조를 설명하는 문�
 
 최상위 `docs` 디렉토리에는 문서를 직접 두지 않고 대분류 디렉토리만 둔다.
 
+하네스 저장소 최상위는 `docs/`(tool 중립 공통 원칙), `adapters/`(tool별 실행 자산 템플릿), `bundles/`(스택별 선택 로드 문서 묶음) 세 영역으로 나뉜다. 자세한 기준은 `01-md-structure.md`와 `02-harness-boundary.md`를 따른다.
+
 ## 대분류
 
 - `00-docs/`: docs 구조, md 작성 규칙, 문서 탐색 기준
@@ -21,9 +23,9 @@ description: "docs 디렉토리와 현재 md 파일 구조를 설명하는 문�
 
 - `00-index.md`: 이 디렉토리의 목적과 전체 docs 대분류 설명
 - `01-md-structure.md`: md 파일 구조, 번호 규칙, Agent 진입점 관리 기준
-- `02-harness-boundary.md`: docs, `.codex`, `.claude`의 책임 경계와 commit 기준
+- `02-harness-boundary.md`: `docs`, `adapters`, `bundles`와 프로젝트 로컬 adapter의 책임 경계와 commit 기준
 - `03-agent-dir-init.md`: `dir init`, `codex dir init`, `claude dir init` 요청 시 생성할 Agent adapter 기본 구조
-- `04-skill-rule-template.md`: rule md와 skill md의 표준 구조 템플릿과 작성 원칙
+- `04-loading-profile.md`: 항상 로드하는 코어와 선택 로드하는 스택 번들의 구분 기준
 
 ## 번호 규칙
 
@@ -36,9 +38,9 @@ description: "docs 디렉토리와 현재 md 파일 구조를 설명하는 문�
 
 `docs`는 프로젝트에 이식 가능한 AI 하네스 엔지니어링 문서다.
 
-`.codex`와 `.claude`는 각 Agent 실행 환경의 adapter 또는 프로젝트별 커스터마이징 위치다.
+`adapters`는 tool별 실행 자산의 배포용 템플릿이고, `bundles`는 스택별 상세 규칙 묶음이다. 이 셋이 하네스의 공유 자산이다.
 
-따라서 기본적으로 git에 공유할 공통 자산은 `docs`이며, `.codex`와 `.claude`는 모든 프로젝트에 공통으로 필요한 내용이 있을 때만 공유 대상으로 본다.
+각 프로젝트 루트의 `.codex`와 `.claude`는 프로젝트 로컬 adapter이며, 하네스에 commit하지 않는다. 여러 프로젝트에서 반복 사용할 가치가 확인되면 `adapters/<tool>/` 템플릿으로 승격한다.
 
 ## 핵심 규칙 요약
 

@@ -35,8 +35,9 @@ Codex의 `AGENTS.md`는 Claude의 `@path` import처럼 참조 문서 본문을 �
 - 지원하지 않는 AI 환경에서 `dir init`을 요청하면 바로 구조를 생성하지 않고, 아래 "미지원 AI 처리" 기준을 따른다.
 - `codex dir init`은 Codex가 공식적으로 인식하는 위치를 포함한 starter adapter를 생성한다.
 - `claude dir init`은 Claude 프로젝트 구조에 맞는 로컬 adapter를 생성한다.
-- 파일은 내용 없는 빈 파일로 생성한다.
+- 파일은 내용 없는 빈 파일로 생성한다. 이 기본 동작은 바꾸지 않는다.
 - 디렉토리는 비어 있는 디렉토리로 생성한다.
+- 빈 파일 대신 하네스가 배포하는 adapter 템플릿을 설치하려면 `--from-template` 옵션을 사용한다. 기준은 아래 "--from-template 옵션"을 따른다.
 - 이미 존재하는 파일이 비어 있으면 유지한다.
 - 이미 존재하는 파일에 내용이 있으면 덮어쓰기 전에 사용자 확인을 받는다.
 - 생성된 adapter 구조는 프로젝트별 로컬 구조이며, 공통 하네스로 합의되지 않았다면 commit 대상으로 보지 않는다.
@@ -69,6 +70,45 @@ Codex의 `AGENTS.md`는 Claude의 `@path` import처럼 참조 문서 본문을 �
 - adapter 디렉토리(`.claude/`, `.codex/`, `.agents/`)와 Agent 인식용 md(`CLAUDE.md`, `AGENTS.md`)는 인식된 루트에 생성한다.
 - Agent 인식용 md의 `<submodule-path>`는 인식된 루트에서 하네스까지의 상대 경로로 계산한다.
 - 이미 존재하는 파일 처리, commit 기준은 옵션 없는 init과 동일하다.
+
+## --from-template 옵션
+
+`dir init --from-template` 또는 `claude dir init --from-template`은 빈 파일 대신 하네스 저장소의 `adapters/claude/` 템플릿을 프로젝트 로컬 `.claude/`로 복사한다.
+
+옵션을 붙이지 않은 `dir init`의 동작은 기존과 동일하다. 즉 **빈 파일 생성이 여전히 기본 동작이고**, 템플릿 복사는 사용자가 명시적으로 요청했을 때만 수행한다.
+
+### 복사 매핑
+
+| 하네스 템플릿 | 프로젝트 설치 위치 |
+|---|---|
+| `adapters/claude/agents/*.md` | `.claude/agents/` |
+| `adapters/claude/hooks/*.sh` | `.claude/hooks/` |
+| `adapters/claude/rules/01-workflow-gate.md` | `.claude/rules/process/01-workflow-gate.md` |
+| `adapters/claude/skills/ai-process-workflow/` | `.claude/skills/ai-process-workflow/` |
+| `adapters/claude/settings.hooks.json` | `.claude/settings.json`의 `hooks` 키에 **병합** |
+
+### settings.hooks.json 처리
+
+`settings.hooks.json`은 `.claude/settings.json`을 통째로 덮어쓰지 않는다.
+
+- 기존 `.claude/settings.json`을 읽고, 그 JSON의 `hooks` 키에 템플릿 내용을 병합한다.
+- `permissions`, `env` 등 기존 다른 키는 그대로 보존한다.
+- `hooks` 키에 이미 내용이 있으면 덮어쓰기 전에 사용자 확인을 받는다.
+- `.claude/settings.json`이 없거나 비어 있으면 `hooks` 키만 가진 파일로 새로 만든다.
+
+기존 프로젝트 설정을 파괴하지 않는 것이 이 옵션의 전제다.
+
+### 기존 파일 처리
+
+- 설치 대상 파일이 없으면 그대로 복사한다.
+- 설치 대상 파일이 이미 있고 비어 있으면 복사해 채운다.
+- 설치 대상 파일이 이미 있고 내용이 있으면 덮어쓰기 전에 사용자 확인을 받는다. 이는 옵션 없는 init과 동일한 규칙이다.
+
+### 지원 범위
+
+현재 `--from-template`으로 설치할 수 있는 템플릿은 Claude(`adapters/claude/`)뿐이다.
+
+Codex는 배포할 adapter 템플릿이 아직 없으므로 `codex dir init --from-template`은 기존과 동일한 빈 파일 생성으로 처리하고, 템플릿이 없다는 사실을 사용자에게 알린다.
 
 ## 생성 위치 기준
 
@@ -287,3 +327,5 @@ Claude가 이 규칙을 인식하려면 `CLAUDE.md` 상단에서 이 문서를 `
 | `dir init --path [경로]` | 현재 실행 AI 환경에 맞춰 지정 경로(생략 시 현재 위치)를 루트로 인식해 adapter 구조 생성 |
 | `claude dir init --path [경로]` | 지정 경로(생략 시 현재 위치)를 루트로 인식해 `.claude/` 로컬 adapter 구조 생성 |
 | `codex dir init --path [경로]` | 지정 경로(생략 시 현재 위치)를 루트로 인식해 `.codex/`, `.agents/` 로컬 adapter 구조 생성 |
+| `dir init --from-template` | 현재 실행 AI 환경이 Claude이면 `adapters/claude/` 템플릿을 `.claude/`로 복사 설치 (빈 파일 생성 대신) |
+| `claude dir init --from-template` | `adapters/claude/` 템플릿을 `.claude/`로 복사 설치, `settings.hooks.json`은 `.claude/settings.json`의 `hooks` 키에 병합 |

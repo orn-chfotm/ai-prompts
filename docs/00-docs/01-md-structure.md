@@ -8,6 +8,27 @@ description: "md 파일과 디렉토리의 번호 체계, 작성 책임, Agent �
 
 ## 최상위 구조
 
+하네스 저장소 최상위에는 세 영역을 둔다.
+
+```text
+<harness-root>/
+  docs/       ← tool 중립 공통 원칙 (항상 로드하는 코어)
+  adapters/   ← tool별 실행 자산 템플릿 (프로젝트가 복사해 설치)
+  bundles/    ← 스택별 상세 규칙 묶음 (필요한 프로젝트만 선택 로드)
+```
+
+| 영역 | 역할 | 특징 |
+|---|---|---|
+| `docs/` | 역할 모델, 승인 절차, 실행/plan/review 기준 등 tool과 스택에 무관한 공통 원칙 | 특정 tool 전용 문법이나 실행 설정을 넣지 않는다 |
+| `adapters/` | 특정 AI tool에서 하네스를 실제로 동작시키는 실행 자산(subagent 정의, hook, 설정, rule, skill)의 **배포 템플릿** | tool 전용 문법이 허용되는 유일한 위치 |
+| `bundles/` | 특정 기술 스택 전용 상세 규칙 묶음 | 프로젝트가 필요할 때만 로드한다 |
+
+로드 대상 구분(코어/선택) 기준은 `04-loading-profile.md`를 따른다.
+
+`docs`와 `adapters`의 책임 경계와 commit 기준은 `02-harness-boundary.md`를 단일 기준으로 따른다.
+
+### docs 하위 구조
+
 최상위 `docs`에는 md 파일을 직접 두지 않는다.
 
 `docs` 하위에는 대분류 디렉토리만 둔다.

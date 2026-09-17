@@ -10,19 +10,22 @@ Codex는 공식적으로 `AGENTS.md`를 프로젝트 지침으로 읽는다. Cla
 
 아래 문서 목록은 자동 import 대상이 아니라, 작업 중 필요할 때 읽어야 하는 참조 안내다.
 
+## 코어 참조 범위
+
+이 목록은 Claude 진입점(`CLAUDE.md`)이 import하는 **코어와 동일한 기준**으로 맞춘다.
+
+- 코어: `docs/00-docs/*`, `docs/20-ai-process/**`, `docs/30-execution/*`, `docs/40-plan/*`, `docs/50-review/*`
+- 선택: `docs/10-technical/*`, `bundles/*`
+
+구분 기준은 `docs/00-docs/04-loading-profile.md`를 따른다.
+
 ## 문서 구조 참조
 
 - `docs/00-docs/00-index.md`
 - `docs/00-docs/01-md-structure.md`
 - `docs/00-docs/02-harness-boundary.md`
 - `docs/00-docs/03-agent-dir-init.md`
-
-## 기술 규칙 참조
-
-- `docs/10-technical/00-index.md`
-- `docs/10-technical/01-naming.md`
-- `docs/10-technical/02-spring.md`
-- `docs/10-technical/03-javascript.md`
+- `docs/00-docs/04-loading-profile.md`
 
 ## AI 처리 구조 참조
 
@@ -58,6 +61,31 @@ Codex는 공식적으로 `AGENTS.md`를 프로젝트 지침으로 읽는다. Cla
 - `docs/50-review/02-test-policy.md`
 - `docs/50-review/03-error-handling.md`
 - `docs/50-review/04-review-logging.md`
+
+## 선택 참조 (필요할 때만)
+
+다음은 코어가 아니다. 해당 스택을 쓰는 프로젝트에서만 참조한다.
+
+- `docs/10-technical/00-index.md`
+- `docs/10-technical/01-naming.md`
+- `docs/10-technical/02-spring.md`
+- `docs/10-technical/03-javascript.md`
+
+## 스택 번들 참조
+
+Codex는 `@import` 문법이 없으므로, 스택 번들을 쓰려면 이 참조 목록에 번들 index 경로를 한 줄 추가하는 방식으로 연결한다.
+
+```md
+## 스택 번들 참조
+
+- bundles/spring-jpa-multimodule/00-index.md
+```
+
+번들에는 그 번들을 만든 프로젝트의 고유 결정이 섞여 있을 수 있으므로 그대로 적용하지 않고 참고 기준으로 사용한다.
+
+## Codex 한계
+
+Codex에는 Claude의 hook 기반 PA 완료 콜백 강제 수단이 없다. PA 산출물 보고는 절차 준수로만 보장되므로, Codex 환경에서는 PA 완료 보고를 더 명시적으로 확인한다.
 
 ## Codex 전용 규칙
 

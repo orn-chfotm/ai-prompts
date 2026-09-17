@@ -10,8 +10,20 @@ description: "AI 하네스 공통 구조와 tool adapter 사용 규칙"
 
 ```text
 docs
-= 공통 AI 하네스
-= 모든 프로젝트에서 우선 참조할 역할, 절차, 기술 원칙, 리뷰 기준
+= 공통 AI 하네스 (코어)
+= 모든 프로젝트에서 항상 로드할 역할, 절차, 기술 원칙, 리뷰 기준
+= tool 중립. 특정 tool 전용 문법과 실행 설정을 넣지 않는다
+
+adapters
+= tool별 실행 자산 배포 템플릿
+= subagent 정의, hook, 설정, rule, skill처럼 특정 tool에서만 동작하는 자산
+= 하네스의 1급 산출물이며 commit 대상
+= 프로젝트는 여기서 복사해 자기 .claude/ 등에 설치한다
+
+bundles
+= 스택별 상세 규칙 묶음
+= 해당 스택을 쓰는 프로젝트만 선택 로드
+= 하네스의 1급 산출물이며 commit 대상
 
 .codex
 = Codex adapter
@@ -22,24 +34,50 @@ docs
 = Codex가 repository skill을 탐색하는 위치
 
 .claude
-= Claude adapter
+= Claude 프로젝트 로컬 adapter
 = Claude에서 docs 하네스를 실제로 연결하거나 확장하는 로컬/프로젝트별 설정
 ```
 
+`adapters`(하네스가 배포하는 템플릿)와 `.claude`/`.codex`(프로젝트 로컬 설정)는 서로 다른 것이다. 전자는 commit 대상이고, 후자는 아니다.
+
+## 로딩 프로파일
+
+모든 프로젝트가 모든 문서를 로드하지 않는다.
+
+- 코어(항상 로드): `docs/00-docs/*`, `docs/20-ai-process/**`, `docs/30-execution/*`, `docs/40-plan/*`, `docs/50-review/*`
+- 선택(필요할 때만): `docs/10-technical/*`, `bundles/*`
+
+하네스의 `CLAUDE.md`는 코어만 import한다. 스택 번들이 필요하면 프로젝트 루트 `CLAUDE.md`에서 번들 index를 한 줄 더 import한다.
+
+```md
+@.ai-prompts/CLAUDE.md                                   ← 코어 (필수)
+@.ai-prompts/bundles/spring-jpa-multimodule/00-index.md  ← 스택 번들 (선택)
+@.claude/rules/...                                       ← 프로젝트 고유
+```
+
+Codex는 `@import`가 없으므로 `AGENTS.md`의 참조 문서 목록에 번들 index 경로를 추가해 같은 효과를 낸다.
+
+자세한 기준은 `docs/00-docs/04-loading-profile.md`를 따른다.
+
 ## 기본 원칙
 
-- `docs`는 공통적으로 처리되어야 하는 AI 하네스 기준이다.
-- tool별 adapter는 프로젝트별 Agent 실행 환경을 조정한다.
-- 현재 기본 adapter는 Codex(`.codex`, `.agents`)와 Claude(`.claude`)를 제공한다.
+- `docs`는 공통적으로 처리되어야 하는 tool 중립 AI 하네스 기준이다.
+- `adapters`는 tool별 실행 자산의 배포 템플릿이며, tool 전용 문법이 허용되는 유일한 위치다.
+- `bundles`는 스택별 상세 규칙 묶음이며, 해당 스택을 쓰는 프로젝트만 로드한다.
+- 프로젝트 로컬 adapter는 프로젝트별 Agent 실행 환경을 조정한다.
+- 현재 기본 프로젝트 로컬 adapter는 Codex(`.codex`, `.agents`)와 Claude(`.claude`)를 제공한다.
+- 현재 배포하는 adapter 템플릿은 Claude(`adapters/claude/`)뿐이다.
 - `dir init`은 현재 실행 중인 AI 환경이 Claude인지 Codex인지 판단해 해당 adapter 구조를 생성한다.
 - 현재 `dir init` 자동 처리는 Claude와 Codex에서만 지원한다.
-- 실제 프로젝트의 상세 구현 규칙, 인프라 구조, DB 제약, 리뷰어 역할은 필요한 경우 해당 tool adapter에 추가한다.
-- tool adapter의 내용은 모든 프로젝트에 공통인 경우가 아니라면 commit하지 않는다.
-- 반복적으로 여러 프로젝트에 필요해진 규칙은 `docs`로 승격한다.
+- 실제 프로젝트의 상세 구현 규칙, 인프라 구조, DB 제약, 리뷰어 역할은 필요한 경우 해당 프로젝트 로컬 adapter에 추가한다.
+- 프로젝트 로컬 adapter의 내용은 모든 프로젝트에 공통인 경우가 아니라면 commit하지 않는다.
+- 반복적으로 여러 프로젝트에 필요해진 규칙은 `docs`로 승격한다. 다만 tool 전용 실행 자산은 `adapters/<tool>/`로, 스택 전용 규칙은 `bundles/<name>/`으로 승격한다.
 
-이 저장소는 기본적으로 tool adapter 실제 디렉토리 구조를 commit하지 않는다.
+이 저장소는 프로젝트 로컬 adapter 디렉토리(`.claude`, `.codex`, `.agents`)를 commit하지 않는다.
 
 사용자는 pull 받은 프로젝트에서 `dir init` 또는 명시적인 tool별 dir init 명령을 요청해 로컬 adapter 구조를 생성한다.
+
+Claude 실행 자산을 빈 파일이 아니라 하네스 템플릿으로 설치하려면 `claude dir init --from-template`을 요청한다.
 
 ## 실행 툴별 진입점
 
@@ -80,6 +118,20 @@ docs/
   30-execution/
   40-plan/
   50-review/
+```
+
+하네스 저장소 최상위 전체 구조는 다음과 같다.
+
+```text
+<harness-root>/
+  CLAUDE.md          코어만 import하는 Claude 진입점
+  AGENTS.md          Codex용 코어 참조 목록
+  README.md
+  docs/              tool 중립 공통 원칙 (코어)
+  adapters/
+    claude/          Claude 실행 자산 배포 템플릿
+  bundles/
+    <name>/          스택별 상세 규칙 묶음 (선택 로드)
 ```
 
 ## agents 규칙
@@ -268,17 +320,45 @@ Claude에서 추가 전문 역할이 필요할 때 둔다.
 
 agents는 `docs`의 역할 기준을 Claude subagent로 연결한다.
 
+## adapters: Claude 배포 템플릿
+
+`adapters/claude/`는 하네스가 배포하는 Claude 실행 자산 템플릿이다. 프로젝트 로컬 `.claude/`와 달리 이 저장소의 commit 대상이다.
+
+```text
+adapters/claude/
+  agents/{pm,cto,pl,pa}.md
+  hooks/{subagent-stop-flag.sh,check-pa-callback.sh}
+  settings.hooks.json
+  rules/01-workflow-gate.md
+  skills/ai-process-workflow/SKILL.md
+  README.md
+```
+
+설치는 `claude dir init --from-template`으로 한다. 복사 매핑과 `settings.hooks.json` 병합 기준은 `docs/00-docs/03-agent-dir-init.md`의 "--from-template 옵션"을 따른다.
+
+Codex용 배포 템플릿은 아직 없다.
+
+## bundles: 스택별 규칙 묶음
+
+`bundles/<name>/`은 특정 기술 스택 전용 상세 규칙 묶음이다. 진입점은 `bundles/<name>/00-index.md`이며, 프로젝트는 이 index 한 줄만 연결한다.
+
+번들에는 그 번들을 만든 프로젝트의 고유 결정(디렉토리명, 모듈명 등)이 섞여 있을 수 있으므로 그대로 적용하지 않고 참고 기준으로 사용한다.
+
+번들 추가 규칙은 `docs/00-docs/04-loading-profile.md`를 따른다.
+
 ## commit 기준
 
-기본 commit 대상은 `docs`다.
+기본 commit 대상은 `docs`, `adapters`, `bundles`다.
 
-`.codex`, `.claude`, `.agents`의 commit 조건은 `docs/00-docs/02-harness-boundary.md`의 "commit 기준"을 단일 기준으로 따른다.
+`.codex`, `.claude`, `.agents`처럼 프로젝트 로컬 adapter의 commit 조건은 `docs/00-docs/02-harness-boundary.md`의 "commit 기준"을 단일 기준으로 따른다.
 
 ## dir init 사용법
 
 이 저장소를 pull 받은 뒤 현재 실행 AI 환경에 맞춰 자동 생성하려면 `dir init`을 요청한다.
 
 명시적으로 지정하려면 `codex dir init` 또는 `claude dir init`을 요청한다.
+
+기본 동작은 빈 파일 생성이다. Claude 실행 자산을 하네스 템플릿으로 채워 설치하려면 `claude dir init --from-template`을 요청한다.
 
 현재 자동 init을 지원하는 AI 환경은 Claude와 Codex로 제한한다.
 
