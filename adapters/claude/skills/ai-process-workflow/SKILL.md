@@ -70,6 +70,12 @@ PA는 기본적으로 다중 subagent(`Agent` 도구)로 실행한다. 여러 PA
 
 PL 역할이 담당 범위·읽기 대상·검증 기준·통합 순서를 먼저 정하고, 각 PA 산출물을 받아 최종 소스를 직접 확인한 뒤 검증·통합까지 책임진다. PA는 자기 작업 결과를 현재 디렉토리에 직접 통합하지 않는다.
 
+## PA 완료 전 Reviewer 검토 (필수)
+
+@.claude/rules/process/02-agent-review.md 를 따른다. PA는 완료 반환 전에 reviewer를 동기 호출하고, 지적사항 수정·검증·재검토 후 PASS 최종본만 PL에 전달한다. BLOCKED는 완료와 구분한다. `.claude/hooks/check-pa-review.cjs`는 종료 보고 누락을 검사하며 실제 호출·검토 품질을 인증하지 않는다.
+
+작업 중 대화에 프롬프트·MD 개선 필요가 있으면 @.claude/agents/prompter.md 를 호출한다. MD 변경은 사용자 검토 승인 후 담당 실행자가 반영하며, 아래 리뷰 기록도 같은 승인 요건을 따른다.
+
 ## PA 완료 콜백 보고 (필수)
 
 PA(서브에이전트)가 종료되면 `.claude/hooks/subagent-stop-flag.sh`(`SubagentStop` 훅)가 플래그를 남기고, 메인 세션이 응답을 끝내려는 순간 `.claude/hooks/check-pa-callback.sh`(`Stop` 훅)가 이를 감지해 응답 종료를 막는다. 이 덕분에 PA 종료 시점을 사용자가 놓치지 않는다 — 훅이 막으면 아래 형식으로 콜백 보고부터 출력한 뒤 계속한다.
@@ -81,6 +87,8 @@ PA(서브에이전트)가 종료되면 `.claude/hooks/subagent-stop-flag.sh`(`Su
 📁 변경/생성 파일: ...
 📝 작업 내용: ...
 🧪 검증 결과: ...
+🔎 Reviewer 검토: 검토 기준·범위·최종 PASS, 지적사항별 추천
+🔁 추천 처리: PA 수정·재검증, PL 수용/보류 결정·이유 (없으면 없음)
 ```
 
 **실패 시**
@@ -89,6 +97,7 @@ PA(서브에이전트)가 종료되면 `.claude/hooks/subagent-stop-flag.sh`(`Su
 ❌ PA 작업 실패
 💥 실패 이유: ...
 🔍 에러 분석: ...
+🔎 Reviewer 검토: BLOCKED 사유, 수행한 검토 또는 미수행 사유, 미해결 지적사항
 🔁 다음 조치: (PL이 원인 검증 후 PA 재작업 지시 / 🧭 CTO 에스컬레이션(기술 이슈) / 🗂️ PM 에스컬레이션(설계·범위 이슈) / ❓ 사용자 확인 필요 항목)
 ```
 

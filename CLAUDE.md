@@ -13,6 +13,8 @@ description: "Claude 전용 하네스 코어 진입점입니다. 상단의 @ imp
 @docs/20-ai-process/agents/roles/02-cto.md
 @docs/20-ai-process/agents/roles/03-pl.md
 @docs/20-ai-process/agents/roles/04-pa.md
+@docs/20-ai-process/agents/roles/05-prompter.md
+@docs/20-ai-process/agents/roles/06-reviewer.md
 @docs/30-execution/01-workflow.md
 @docs/30-execution/02-task-splitting.md
 @docs/30-execution/03-output-format.md

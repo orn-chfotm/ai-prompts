@@ -83,7 +83,9 @@ Codex의 `AGENTS.md`는 Claude의 `@path` import처럼 참조 문서 본문을 �
 |---|---|
 | `adapters/claude/agents/*.md` | `.claude/agents/` |
 | `adapters/claude/hooks/*.sh` | `.claude/hooks/` |
+| `adapters/claude/hooks/*.cjs` | `.claude/hooks/` |
 | `adapters/claude/rules/01-workflow-gate.md` | `.claude/rules/process/01-workflow-gate.md` |
+| `adapters/claude/rules/02-agent-review.md` | `.claude/rules/process/02-agent-review.md` |
 | `adapters/claude/skills/ai-process-workflow/` | `.claude/skills/ai-process-workflow/` |
 | `adapters/claude/settings.hooks.json` | `.claude/settings.json`의 `hooks` 키에 **병합** |
 

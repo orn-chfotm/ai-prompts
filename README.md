@@ -326,10 +326,10 @@ agents는 `docs`의 역할 기준을 Claude subagent로 연결한다.
 
 ```text
 adapters/claude/
-  agents/{pm,cto,pl,pa}.md
-  hooks/{subagent-stop-flag.sh,check-pa-callback.sh}
+  agents/{pm,cto,pl,pa,prompter,reviewer}.md
+  hooks/{subagent-stop-flag.sh,check-pa-callback.sh,check-pa-review.cjs}
   settings.hooks.json
-  rules/01-workflow-gate.md
+  rules/{01-workflow-gate,02-agent-review}.md
   skills/ai-process-workflow/SKILL.md
   README.md
 ```

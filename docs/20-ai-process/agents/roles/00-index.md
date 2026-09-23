@@ -1,5 +1,5 @@
 ---
-description: "Agent 역할 상세 문서 인덱스입니다. PM, CTO, PL, PA의 책임, 능력치, 산출물을 안내합니다."
+description: "Agent 역할 상세 문서 인덱스입니다. PM, CTO, PL, PA, Prompter, Reviewer의 책임, 능력치, 산출물을 안내합니다."
 ---
 
 # roles 인덱스
@@ -22,6 +22,8 @@ description: "Agent 역할 상세 문서 인덱스입니다. PM, CTO, PL, PA의 
 - `02-cto.md`: 폭넓은 개발 지식으로 기술 방향과 리스크를 검토하는 CTO
 - `03-pl.md`: CTO 방향을 개발 계획과 PA 작업 단위로 바꾸는 PL
 - `04-pa.md`: PL이 분리한 작업을 정확하게 실행하는 PA
+- `05-prompter.md`: 작업 중 프롬프트·MD 개선을 추천하고 사용자 승인을 요청하는 Prompter
+- `06-reviewer.md`: PL 전달 전 PA 코드 검토·재작업·재검토를 담당하는 Reviewer
 
 ## 기본 흐름
 
@@ -29,7 +31,10 @@ description: "Agent 역할 상세 문서 인덱스입니다. PM, CTO, PL, PA의 
 2. CTO가 기술 방향과 제한성을 검토한다.
 3. PL이 개발 작업을 분리한다.
 4. PA가 승인된 작업 단위를 실행한다.
-5. 사용자가 승인, 거부, 보류, 재요청을 결정한다.
+5. Reviewer가 PA 완료 전에 검토하고, PA 수정·재검토 후 PL에 최종본을 전달한다.
+6. 사용자가 승인, 거부, 보류, 재요청을 결정한다.
+
+Prompter는 작업 중 대화에서 반복 지시나 MD 개선 필요가 발견되면 호출한다.
 
 ## 역할 사용 기준
 

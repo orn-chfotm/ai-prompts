@@ -39,6 +39,8 @@ Codex는 공식적으로 `AGENTS.md`를 프로젝트 지침으로 읽는다. Cla
 - `docs/20-ai-process/agents/roles/02-cto.md`
 - `docs/20-ai-process/agents/roles/03-pl.md`
 - `docs/20-ai-process/agents/roles/04-pa.md`
+- `docs/20-ai-process/agents/roles/05-prompter.md`
+- `docs/20-ai-process/agents/roles/06-reviewer.md`
 
 ## 실행 절차 참조
 
